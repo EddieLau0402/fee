@@ -1,0 +1,19 @@
+{
+    "name": "eddie/fee",
+    "description": "Laravel 话费充值,源慧",
+    "keywords": ["Laravel5","源慧","话费充值"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Eddie",
+            "email": "277676978@qq.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Eddie\\Fee\\": "src"
+        }
+    },
+    "minimum-stability": "dev"
+}
