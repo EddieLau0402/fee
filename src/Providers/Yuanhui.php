@@ -66,6 +66,13 @@ class Yuanhui implements FeeInterface
      */
     protected $_amount;
 
+    /**
+     * 充值回调页面，话费充值成功后会通知回调该页面
+     *
+     * @var
+     */
+    protected $_callback;
+
 
     /**
      * Yuanhui constructor.
@@ -122,6 +129,13 @@ class Yuanhui implements FeeInterface
         return $this;
     }
 
+    /**
+     * Setter - set amount of recharge fee.
+     *
+     * @param $amount
+     * @return $this
+     * @throws \Exception
+     */
     public function amount($amount)
     {
         if (!is_numeric($amount))
@@ -131,17 +145,35 @@ class Yuanhui implements FeeInterface
         return $this;
     }
 
+    /**
+     * Setter - set callback URL.
+     *
+     * @param $callback
+     * @return $this
+     */
+    public function callback($callback)
+    {
+        $this->_callback = $callback;
+        return $this;
+    }
+
 
     /**
      * 话费充值
      */
     public function recharge($amount = null)
     {
+        /*
+         * Invalid
+         */
         if (!$this->_order_id) {
             throw new \Exception('订单号不能为空', 422);
         }
         if (!$this->_mobile) {
             throw new \Exception('手机号不能为空', 422);
+        }
+        if (!$this->_callback) {
+            throw new \Exception('请设置充值回调地址', 422);
         }
         if (!$this->_amount) {
             if (!$amount) {
@@ -150,11 +182,15 @@ class Yuanhui implements FeeInterface
             $this->amount($amount);
         }
 
+        /*
+         * Build parameters of request.
+         */
         $params = [
             'cid' => $this->_cid,
             'productid' => $this->__getProductId(),
             'orderid' => $this->_order_id,
             'mob' => $this->_mobile,
+            'recallurl' => $this->_callback,
             'timestamps' => $this->__getMsec() // 精确到毫秒
         ];
 
@@ -217,7 +253,7 @@ class Yuanhui implements FeeInterface
         /*
          * 去除 非必选参数
          */
-        //unset($params['recallurl']);
+        unset($params['recallurl']);
 
         /*
          * Generate signature.
