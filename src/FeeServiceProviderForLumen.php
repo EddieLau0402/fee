@@ -5,7 +5,7 @@ namespace Eddie\Fee;
 
 use Illuminate\Support\ServiceProvider;
 
-class FeeServiceProvider extends ServiceProvider
+class FeeServiceProviderForLumen extends ServiceProvider
 {
     /**
      * Indicates if loading of the provider is deferred.
@@ -22,7 +22,7 @@ class FeeServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->handleConfigs();
+//        $this->handleConfigs();
         // $this->handleMigrations();
         // $this->handleViews();
          $this->handleTranslations();
